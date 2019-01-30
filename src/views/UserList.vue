@@ -61,6 +61,9 @@
 <script>
 import HeadTop from 'components/HeadTop'
 export default {
+  created() {
+    this.fetchUserList ()
+  },
   data () {
     return {
       tableData: [{
@@ -89,6 +92,13 @@ export default {
     }
   },
   methods: {
+    fetchUserList () {
+      this.$axios.get(`/api/admin/getAllUser/${this.currentPage}`).then(r => {
+        this.tableData = r.data.data
+      }).catch(() => {
+        this.$message.error('网络错误！')
+      })
+    },
     handleEdit (index, row) {
       console.log(index, row)
     },
@@ -101,7 +111,7 @@ export default {
     handleCurrentChange (val) {
       this.currentPage = val
       this.offset = (val - 1) * this.limit
-      // this.getUsers()
+      this.fetchUserList()
     }
   },
   components: {
