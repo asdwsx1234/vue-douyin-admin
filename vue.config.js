@@ -5,7 +5,7 @@ function resolve (dir) {
 }
 module.exports = {
   // 选项...
-  baseUrl: './',
+  publicPath: './',
   outputDir: 'dist',
   assetsDir: 'assets',
   indexPath: 'index.html',
