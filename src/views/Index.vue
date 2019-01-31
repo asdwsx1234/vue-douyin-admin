@@ -23,7 +23,7 @@
     </el-col>
     <el-col :span="20" style="height: 100%;overflow: auto;">
       <keep-alive>
-          <router-view></router-view>
+        <router-view></router-view>
       </keep-alive>
     </el-col>
   </el-row>
@@ -32,6 +32,8 @@
 
 <script>
 export default {
+  activated () {
+  },
   data () {
     return {
     }

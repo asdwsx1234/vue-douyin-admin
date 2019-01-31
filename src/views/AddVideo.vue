@@ -38,7 +38,7 @@
             <img :src="formData.videoCover" alt="" width="100%" height="100%">
             <el-button type="primary" slot="reference">预览封面</el-button>
           </el-popover>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button :loading="loading" type="primary" @click="submitForm('formData')">立即创建</el-button>
         </el-row>
       </el-form>
     </el-col>
@@ -48,9 +48,26 @@
 
 <script>
 import HeadTop from 'components/HeadTop'
-import { regVideoUrl, regCoverUrl } from 'common/js/util'
+import { regEmail, regVideoUrl, regCoverUrl } from 'common/js/util'
 export default {
   data () {
+    let validateEmailIsExisted = async (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入用户登录邮箱'))
+      } else if (!regEmail.test(value)) {
+        callback(new Error('邮箱格式错误'))
+      } else {
+        let r
+        try {
+          r = await this.$axios.get(`/api/common/user/detectEmail/${value}`)
+          if (r.status === 200) {
+            callback()
+          }
+        } catch (e) {
+          callback(new Error('邮箱未注册'))
+        }
+      }
+    }
     let validateVideoPathURL = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入视频URL'))
@@ -70,6 +87,7 @@ export default {
       }
     }
     return {
+      loading: false,
       formData: {
         userEmail: '814930498@qq.com',
         videoPath: 'https://video.pearvideo.com/mp4/adshort/20190130/cont-1512669-13539748_adpkg-ad_hd.mp4',
@@ -78,8 +96,7 @@ export default {
       },
       rules: {
         userEmail: [
-          { required: true, message: '请输入所属用户邮箱', trigger: 'blur' },
-          { type: 'email', message: '邮箱格式错误', trigger: 'blur' }
+          { required: true, validator: validateEmailIsExisted, trigger: 'blur' }
         ],
         videoPath: [
           { required: true, validator: validateVideoPathURL, trigger: 'blur' }
@@ -94,16 +111,29 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
-      console.log(1)
+    submitForm (formData) {
+      this.$refs[formData].validate(async (valid) => {
+        if (valid) {
+          this.loading = true
+          let r = await this.$axios.post('/api/admin/addVideo', this.formData)
+          if (r.status === 200) {
+            this.$message({
+              type: 'success',
+              message: `新增视频${r.data.data.videoId}成功!`
+            })
+          } else {
+            this.$message.error('网络错误！')
+          }
+          this.loading = false
+        } else {
+          return false
+        }
+      })
     },
     previewVideo () {
       const v = this.$refs.video
       v.src = this.formData.videoPath
       v.play()
-    },
-    previewCover () {
-
     },
     playHandler () {
       const v = this.$refs.video

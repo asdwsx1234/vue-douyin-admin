@@ -1,5 +1,9 @@
 const state = {
   isLogged: false,
-  loginInfo: {}
+  loginInfo: {},
+  statistic: {
+    today: {},
+    sum: {}
+  }
 }
 export default state

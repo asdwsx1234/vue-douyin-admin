@@ -43,7 +43,7 @@
             v-model="formData.userDesc"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button :loading="loading" type="primary" @click="submitForm('formData')">立即创建</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -53,9 +53,28 @@
 
 <script>
 import HeadTop from 'components/HeadTop'
+import { regEmail } from 'common/js/util'
 export default {
   data () {
+    let validateEmailIsExisted = async (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入用户登录邮箱'))
+      } else if (!regEmail.test(value)) {
+        callback(new Error('邮箱格式错误'))
+      } else {
+        let r
+        try {
+          r = await this.$axios.get(`/api/common/user/detectEmail/${value}`)
+          if (r.status === 200) {
+            callback(new Error('邮箱已注册'))
+          }
+        } catch (e) {
+          callback()
+        }
+      }
+    }
     return {
+      loading: false,
       formData: {
         userEmail: 'xxxx@qq.com',
         userPassword: '123456',
@@ -67,8 +86,7 @@ export default {
       },
       rules: {
         userEmail: [
-          { required: true, message: '请输入用户登录邮箱', trigger: 'blur' },
-          { type: 'email', message: '邮箱格式错误', trigger: 'blur' }
+          { required: true, validator: validateEmailIsExisted, trigger: 'blur' }
         ],
         userPassword: [
           { required: true, message: '请输入用户登录密码', trigger: 'blur' },
@@ -93,8 +111,24 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
-      console.log(1)
+    submitForm (formData) {
+      this.$refs[formData].validate(async (valid) => {
+        if (valid) {
+          this.loading = true
+          let r = await this.$axios.post('/api/admin/addUser', this.formData)
+          if (r.status === 200) {
+            this.$message({
+              type: 'success',
+              message: `新增用户${r.data.data.newUser.userId}成功!`
+            })
+          } else {
+            this.$message.error('网络错误！')
+          }
+          this.loading = false
+        } else {
+          return false
+        }
+      })
     }
   },
   components: {

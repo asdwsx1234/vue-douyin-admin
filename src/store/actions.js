@@ -24,3 +24,12 @@ export const logout = async ({ commit }, admin) => {
   commit(types.SET_ISLOGGED, false)
   commit(types.SET_LOGININFO, {})
 }
+
+export const getNums = async ({ commit, state }) => {
+  let r = await instance.get('/api/admin/getNums')
+  if (r.status === 200) {
+    commit(types.SET_STATISTIC, r.data.data)
+  } else {
+    throw new Error('network error')
+  }
+}

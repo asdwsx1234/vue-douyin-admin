@@ -5,6 +5,9 @@ const mutations = {
   },
   [types.SET_LOGININFO] (state, loginInfo) {
     state.loginInfo = loginInfo
+  },
+  [types.SET_STATISTIC] (state, statistic) {
+    state.statistic = statistic
   }
 }
 

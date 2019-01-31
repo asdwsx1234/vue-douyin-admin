@@ -9,10 +9,10 @@
           <div slot="header" class="clearfix">
             <span>当日数据</span>
           </div>
-          <div class="text item">新增用户：{{result.today.userSum}}</div>
-          <div class="text item">新增评论：{{result.today.commentSum}}</div>
-          <div class="text item">新增视频：{{result.today.videoSum}}</div>
-          <div class="text item">新增播放：{{result.today.watchSum}}</div>
+          <div class="text item">新增用户：{{statistic.today.userSum}}</div>
+          <div class="text item">新增评论：{{statistic.today.commentSum}}</div>
+          <div class="text item">新增视频：{{statistic.today.videoSum}}</div>
+          <div class="text item">新增播放：{{statistic.today.watchSum}}</div>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -20,10 +20,10 @@
           <div slot="header" class="clearfix">
             <span>总数据</span>
           </div>
-          <div class="text item">用户总数：{{result.sum.userSum}}</div>
-          <div class="text item">评论总数：{{result.sum.commentSum}}</div>
-          <div class="text item">视频总数：{{result.sum.videoSum}}</div>
-          <div class="text item">播放总数：{{result.sum.watchSum}}</div>
+          <div class="text item">用户总数：{{statistic.sum.userSum}}</div>
+          <div class="text item">评论总数：{{statistic.sum.commentSum}}</div>
+          <div class="text item">视频总数：{{statistic.sum.videoSum}}</div>
+          <div class="text item">播放总数：{{statistic.sum.watchSum}}</div>
         </el-card>
       </el-col>
     </el-row>
@@ -33,21 +33,23 @@
 
 <script>
 import HeadTop from 'components/HeadTop'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  created () {
-    this.$axios.get('/api/admin/getNums').then(r => {
-      this.result = r.data.data
-    }).catch(() => {
-      this.$message.error('网络错误！')
-    })
+  activated () {
+    this.getNums()
   },
   data () {
-    return {
-      result: {
-        today: {},
-        sum: {}
-      }
-    }
+    return {}
+  },
+  computed: {
+    ...mapGetters([
+      'statistic'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'getNums'
+    ])
   },
   components: {
     HeadTop
