@@ -1,31 +1,38 @@
-# vue-douyin-admin
+# 低仿抖音短视频配套后台管理系统
+------
+## 技术栈
+ - Axios
+ - Vue2
+ - Vuex
+ - Vue Router
+ - Vue CLI 3
 
-## Project setup
+## 项目运行
+__注意：由于涉及大量的 ES6/7 等新属性，node 需要 6.0 以上版本__
+
 ```
+git clone https://github.com/asdwsx1234/vue-douyin-admin.git 
+
+cd vue-douyin-admin
+
 npm install
+
+npm run serve （请求后端地址在src/common/config.js中配置，请与[vue-douyin中的server配合使用](https://github.com/asdwsx1234/vue-douyin)）
+
+
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 效果演示
+[查看demo请戳这里](http://www.zhoubaba.club/admin)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 目标功能
+ - [x] 登录
+ - [x] 每日数据、总数据查看
+ - [x] 用户增改查
+ - [x] 视屏增改查
+ - [ ] 用户删
+ - [ ] 视频删
 
-### Run your tests
-```
-npm run test
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-test111
+## License
+[MIT](./LICENSE)
