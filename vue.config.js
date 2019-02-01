@@ -8,7 +8,7 @@ module.exports = {
   publicPath: './',
   outputDir: 'dist',
   assetsDir: 'assets',
-  indexPath: 'index.html',
+  indexPath: 'admin.html',
   filenameHashing: true,
   pages: undefined,
   lintOnSave: true,
