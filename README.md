@@ -1,5 +1,7 @@
 # 低仿抖音短视频配套后台管理系统
 ------
+与[低仿抖音短视频](https://github.com/asdwsx1234/vue-douyin)配套的后台管理系统
+
 ## 技术栈
  - Axios
  - Vue2
